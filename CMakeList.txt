@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.10)
+project(MapSearchModule)
+
+set(CMAKE_CXX_STANDARD 17)
+
+# 查找 GDAL
+find_package(GDAL REQUIRED)
+include_directories(${GDAL_INCLUDE_DIRS} include)
+
+# 定义搜索库
+add_library(MapSearch STATIC src/MapSearch.cpp)
+target_link_libraries(MapSearch ${GDAL_LIBRARIES})
+
+# 可执行测试程序
+add_executable(SearchTest main.cpp)
+target_link_libraries(SearchTest MapSearch ${GDAL_LIBRARIES})
+
+# 在编译时自动把 data 文件夹拷贝到 build 目录下
+file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
